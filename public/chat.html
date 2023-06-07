@@ -1,0 +1,45 @@
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport'
+        content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0'>
+  <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+  <title>Document</title>
+</head>
+<body>
+<script>
+  const socket = new WebSocket('ws://localhost:8080');
+
+  // Event listener for successful WebSocket connection
+  socket.addEventListener('open', () => {
+    console.log('Connected to WebSocket server');
+
+    // Send a message to the server
+    const message = { content: 'Hello server!' };
+    socket.send(JSON.stringify(message));
+  });
+
+  // Event listener for incoming messages from the server
+  socket.addEventListener('message', (event) => {
+    const message = JSON.parse(event.data);
+    console.log('Received message from server:', message);
+  });
+
+  socket.addEventListener('event', (event) => {
+    const message = JSON.parse(event.data);
+    console.log('Received message from server:', message);
+  });
+
+  // Event listener for WebSocket errors
+  socket.addEventListener('error', (error) => {
+    console.error('WebSocket error:', error);
+  });
+
+  // Event listener for WebSocket disconnection
+  socket.addEventListener('close', () => {
+    console.log('Disconnected from WebSocket server');
+  });
+  
+</script>
+</body>
+</html>
