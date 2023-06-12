@@ -8,7 +8,7 @@
 </head>
 <body>
 <script>
-  const socket = new WebSocket('ws://localhost:8080');
+  const socket = new WebSocket('ws://localhost:3200');
 
   // Event listener for successful WebSocket connection
   socket.addEventListener('open', () => {
@@ -39,7 +39,7 @@
   socket.addEventListener('close', () => {
     console.log('Disconnected from WebSocket server');
   });
-  
+
 </script>
 </body>
 </html>

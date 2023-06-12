@@ -1,20 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as twilio from 'twilio';
-import { TwilioProvider } from '../providers/twilio.provider';
-import { DialogFlowProvider } from '../providers/dialogFlow.provider';
+//import { TwilioProvider } from './twilio.provider';
+import { DialogFlowProvider } from './dialogFlow.provider';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { Twilio } from 'twilio';
 
 @Injectable()
 export class VoiceBotsService {
-  /**
-   * @param configService
-   * @param twilioProvider
-   * @param dialogFlowProvider
-   */
   constructor(
+    @Inject('TWILIO') private readonly twilioProvider: Twilio,
     private readonly configService: ConfigService,
-    private readonly twilioProvider: TwilioProvider,
     private readonly dialogFlowProvider: DialogFlowProvider,
   ) {}
 
@@ -22,7 +18,8 @@ export class VoiceBotsService {
    *
    */
   async initTwilio() {
-    const client = this.twilioProvider.getClient();
+    console.log(this.twilioProvider);
+    /*const client = this.twilioProvider.getClient();
     try {
       const res = await client.calls.create({
         url: this.configService.get('twilio_webhook'),
@@ -33,7 +30,7 @@ export class VoiceBotsService {
       return res;
     } catch (error) {
       console.log(error);
-    }
+    }*/
   }
 
   /**
