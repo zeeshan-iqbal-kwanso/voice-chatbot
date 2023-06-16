@@ -1,23 +1,51 @@
 import {
+  MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import * as Server from 'ws';
 
-@WebSocketGateway()
-export class VoiceBotsGateway {
+@WebSocketGateway(3200)
+export class VoiceBotsGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server;
 
-  @SubscribeMessage('events')
-  onEvent(client: any, data: any): Observable<WsResponse<number>> {
+  /**
+   * @param server
+   */
+  afterInit(server: WebSocket): any {
+    console.log('server connected');
+  }
+
+  /**
+   * @param client
+   * @param args
+   */
+  handleConnection(client: WebSocket, ...args: any[]): any {
+    /*client.on('message', (data) => {
+      console.log(data); // Handle the media data received from Twilio
+      const buffer = Buffer.from(data, 'utf8');
+      const text = buffer.toString('utf8');
+      console.log(text);
+    });*/
+  }
+
+  @SubscribeMessage('message')
+  onMessage(@MessageBody() data: string): any {
     console.log(data);
-    return from([1, 2, 3]).pipe(
-      map((item) => ({ event: 'events', data: item })),
-    );
+    // console.log(data);
+  }
+
+  /**
+   * @param client
+   */
+  handleDisconnect(client: WebSocket): any {
+    console.log('disconnected');
   }
 }

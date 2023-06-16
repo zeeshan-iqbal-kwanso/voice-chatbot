@@ -3,20 +3,23 @@ import { AppModule } from './app.module';
 import configuration from './config/configuration';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
-import * as http from 'http';
+import { createServer } from 'http';
+
 import { WsAdapter } from './voice-bots/ws-adapter';
 //import { WsAdapter } from '@nestjs/platform-ws';
 dotenv.config();
 
 async function bootstrap() {
   const port = configuration().port;
-  const expressApp = express();
-  const server = http.createServer(expressApp);
+  //const expressApp = express();
   const app = await NestFactory.create(AppModule);
+  const server = createServer(app.getHttpAdapter().getInstance());
   app.useWebSocketAdapter(new WsAdapter(server));
   app.use(express.static('public'));
   await app.init();
-  server.listen(port);
+  server.listen(port, () => {
+    console.log(`App is running on port ${port}`);
+  });
   /*await app
     .listen(port)
     .then(() => console.log(`App is running on port ${port}`))
