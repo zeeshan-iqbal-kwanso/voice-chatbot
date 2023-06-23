@@ -5,6 +5,8 @@ import { VoiceBotsModule } from './voice-bots/voice-bots.module';
 import { VoiceBotsGateway } from './voice-bots/voice-bots.gateway';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { AuthProvider } from './auth/auth.provider';
 
 @Module({
   imports: [
@@ -14,8 +16,9 @@ import { AppService } from './app.service';
       envFilePath: Configuration().env === 'prod' ? 'prod.env' : '.env',
     }),
     VoiceBotsModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [VoiceBotsGateway, AppService],
+  providers: [VoiceBotsGateway, AppService, AuthProvider],
 })
 export class AppModule {}
