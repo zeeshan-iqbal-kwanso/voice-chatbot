@@ -4,14 +4,12 @@ import configuration from './config/configuration';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
 import { createServer } from 'http';
-
 import { WsAdapter } from './voice-bots/ws-adapter';
-//import { WsAdapter } from '@nestjs/platform-ws';
+
 dotenv.config();
 
 async function bootstrap() {
   const port = configuration().port;
-  //const expressApp = express();
   const app = await NestFactory.create(AppModule);
   const server = createServer(app.getHttpAdapter().getInstance());
   app.useWebSocketAdapter(new WsAdapter(server));

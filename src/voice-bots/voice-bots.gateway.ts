@@ -1,5 +1,4 @@
 import {
-  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
@@ -7,7 +6,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import * as Server from 'ws';
+import { Server } from 'ws';
 
 @WebSocketGateway(3200)
 export class VoiceBotsGateway
@@ -17,35 +16,36 @@ export class VoiceBotsGateway
   server: Server;
 
   /**
-   * @param server
+   * @param socket
    */
-  afterInit(server: WebSocket): any {
+  afterInit(socket: Server): any {
     console.log('server connected');
   }
 
   /**
-   * @param client
+   * @param socket
    * @param args
    */
-  handleConnection(client: WebSocket, ...args: any[]): any {
+  handleConnection(socket: Server, ...args: any[]): any {
     /*client.on('message', (data) => {
-      console.log(data); // Handle the media data received from Twilio
-      const buffer = Buffer.from(data, 'utf8');
-      const text = buffer.toString('utf8');
-      console.log(text);
+      console.log(JSON.parse(data));
     });*/
   }
 
+  /**
+   * @param socket
+   * @param messageEvent
+   */
   @SubscribeMessage('message')
-  onMessage(@MessageBody() data: string): any {
+  onMessage(socket: Server, messageEvent: MessageEvent): any {
+    const data = JSON.parse(messageEvent.data);
     console.log(data);
-    // console.log(data);
   }
 
   /**
-   * @param client
+   * @param socket
    */
-  handleDisconnect(client: WebSocket): any {
+  handleDisconnect(socket: Server): any {
     console.log('disconnected');
   }
 }

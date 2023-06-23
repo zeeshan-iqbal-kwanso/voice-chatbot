@@ -7,9 +7,6 @@ export class WsAdapter extends IoAdapter implements WebSocketAdapter {
   /** @protected client: Server */
   protected client: Server;
 
-  /** @protected ws: Server */
-  protected ws: Server;
-
   /**
    * @param server
    */
@@ -24,11 +21,6 @@ export class WsAdapter extends IoAdapter implements WebSocketAdapter {
    */
   bindClientConnect(server: Server, callback: any): any {
     server.on('connection', (socket: any) => {
-      //console.log('new connection');
-      socket.on('message', (message) => {
-        //const data = JSON.parse(message);
-        //console.log(data);
-      });
       callback(socket);
     });
   }
@@ -48,7 +40,6 @@ export class WsAdapter extends IoAdapter implements WebSocketAdapter {
    * @return Server
    */
   create(port: number, options?: any): Server {
-    this.ws = new Server({ server: this.server });
-    return this.ws;
+    return new Server({ server: this.server });
   }
 }
