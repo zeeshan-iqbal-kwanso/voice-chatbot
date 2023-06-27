@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { AuthProvider } from './auth/auth.provider';
+import { OidcModule } from './oidc/oidc.module';
 
 @Module({
   imports: [
@@ -14,6 +15,10 @@ import { AuthProvider } from './auth/auth.provider';
       isGlobal: true,
       load: [Configuration],
       envFilePath: Configuration().env === 'prod' ? 'prod.env' : '.env',
+    }),
+    OidcModule.forRoot({
+      issuer: '',
+
     }),
     VoiceBotsModule,
     AuthModule,
